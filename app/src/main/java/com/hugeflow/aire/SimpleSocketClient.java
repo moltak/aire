@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -24,6 +26,10 @@ public class SimpleSocketClient implements Runnable {
 
     @Override
     public void run() {
+        sendUdpMessage();
+    }
+
+    private void sendTcpMessage() {
         try {
             InetAddress serverAddr = InetAddress.getByName(mServerIP);
             Log.d("TCP", "C: Connecting...");
@@ -41,6 +47,36 @@ public class SimpleSocketClient implements Runnable {
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void sendUdpMessage() {
+        try {
+            // Retrieve the ServerName
+            InetAddress serverAddr = InetAddress.getByName(mServerIP);
+
+            Log.d("UDP", "C: Connecting...");
+            /* Create new UDP-Socket */
+            DatagramSocket socket = new DatagramSocket();
+
+            /* Prepare some data to be sent. */
+            byte[] buf = mMsg.getBytes();
+
+            /* Create UDP-packet with
+             * data & destination(url+port) */
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, serverAddr, mServerPort);
+            Log.d("UDP", "C: Sending: '" + new String(buf) + "'");
+
+            /* Send out the packet */
+            socket.send(packet);
+            Log.d("UDP", "C: Sent.");
+            Log.d("UDP", "C: Done.");
+
+//            socket.receive(packet);
+            Log.d("UDP", "C: Received: '" + new String(packet.getData()) + "'");
+
+        } catch (Exception e) {
+            Log.e("UDP", "C: Error", e);
         }
     }
 }
