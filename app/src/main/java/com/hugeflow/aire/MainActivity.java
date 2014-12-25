@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.MediaController;
 import android.widget.VideoView;
 
 import butterknife.ButterKnife;
@@ -45,7 +44,6 @@ public class MainActivity extends ActionBarActivity {
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.sample);
         Log.d("uri", uri.toString());
         mVideoView.setVideoURI(uri);
-        mVideoView.setMediaController(new MediaController(this));
         mVideoView.requestFocus();
         mVideoView.setOnCompletionListener(getOnCompletionListener());
         mVideoView.start();
