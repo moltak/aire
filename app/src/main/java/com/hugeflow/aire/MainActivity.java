@@ -7,9 +7,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import butterknife.ButterKnife;
@@ -41,11 +41,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void startPlayback() {
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.sample);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.seed);
+        Log.d("uri", uri.toString());
         mVideoView.setVideoURI(uri);
         mVideoView.requestFocus();
-        mVideoView.start();
         mVideoView.setOnCompletionListener(getOnCompletionListener());
+        mVideoView.start();
     }
 
     private MediaPlayer.OnCompletionListener getOnCompletionListener() {
@@ -53,23 +54,27 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 mPeriodicalHandler.sendEmptyMessageDelayed(0, 2 * 60 * 1000);
-                SimpleSocketClient simpleSocketClient = new SimpleSocketClient(
-                        "ip", 5000, "msg");
-                new Thread(simpleSocketClient).start();
-                Toast.makeText(MainActivity.this, "2분 대기 및 소켓 전송", Toast.LENGTH_LONG).show();
+                sendStartMessage();
             }
         };
+    }
+
+    private void sendStartMessage() {
+        SimpleSocketClient simpleSocketClient = new SimpleSocketClient(
+                "192.168.10.41", 12800, "start");
+        new Thread(simpleSocketClient).start();
     }
 
     private Handler mPeriodicalHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            startPlayback();
+            mOneTimeBtn.setVisibility(View.VISIBLE);
         }
     };
 
     public void oneTimeClickable(View view) {
+        startPlayback();
         mOneTimeBtn.setVisibility(View.GONE);
     }
 }
