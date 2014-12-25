@@ -3,16 +3,9 @@
     android:layout_height="match_parent">
 
     <VideoView
-        android:id="@+id/myplaysurface"
+        android:id="@+id/videoview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"/>
-
-    <Button
-        android:id="@+id/onetimebtn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:onClick="oneTimeClickable"
-        android:background="@android:color/transparent"/>
 
 </RelativeLayout>

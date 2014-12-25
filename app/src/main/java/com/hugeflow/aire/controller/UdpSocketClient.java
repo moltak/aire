@@ -1,4 +1,4 @@
-package com.hugeflow.aire;
+package com.hugeflow.aire.controller;
 
 import android.util.Log;
 
@@ -15,12 +15,12 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class SimpleSocketClient implements Runnable {
+public class UdpSocketClient implements Runnable {
     private final String mServerIP;
     private final int mServerPort;
     private String mMsg;
 
-    public SimpleSocketClient(String serverIP, int serverPort, String msg) {
+    public UdpSocketClient(String serverIP, int serverPort, String msg) {
         this.mServerIP = serverIP;
         this.mServerPort = serverPort;
         this.mMsg = msg;
