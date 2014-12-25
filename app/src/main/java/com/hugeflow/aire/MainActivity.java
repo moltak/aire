@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import butterknife.ButterKnife;
@@ -55,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
                 SimpleSocketClient simpleSocketClient = new SimpleSocketClient(
                         "ip", 5000, "msg");
                 new Thread(simpleSocketClient).start();
+                Toast.makeText(MainActivity.this, "2분 대기 및 소켓 전송", Toast.LENGTH_LONG).show();
             }
         };
     }
