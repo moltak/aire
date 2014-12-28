@@ -6,6 +6,7 @@ import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * Created by moltak on 14. 12. 25..
@@ -30,9 +31,15 @@ public class BlowAirDetector implements Runnable {
             ar.read(buffer, 0, minSize);
             for (short s : buffer) {
                 int blow_value = Math.abs(s);
-                if (blow_value > 27000) {  //DETECT VOLUME (IF I BLOW IN THE MIC)
+                if (blow_value > 32400) {  //DETECT VOLUME (IF I BLOW IN THE MIC) 27000
                     blowupHandler.sendEmptyMessage(0);
                 }
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
