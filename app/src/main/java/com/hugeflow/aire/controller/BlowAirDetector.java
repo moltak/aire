@@ -49,6 +49,8 @@ public class BlowAirDetector implements Runnable {
 
             if (isNotTimeOver(startTime)) break;
         }
+
+        ar.release();
     }
 
     private boolean isNotTimeOver(long startTime) {
