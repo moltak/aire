@@ -18,6 +18,7 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class MainActivity extends Activity {
@@ -40,12 +41,6 @@ public class MainActivity extends Activity {
         videoView.requestFocus();
         videoView.setOnCompletionListener(getOnCompletionListener());
         videoView.seekTo(10);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        new Thread(new BlowAirDetector()).start();
     }
 
     @Subscribe
@@ -84,5 +79,10 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         BlowAirEventBus.getInstance().unregister(this);
+    }
+
+    @OnClick(R.id.btn_start)
+    public void onVideoViewClick() {
+        new Thread(new BlowAirDetector()).start();
     }
 }

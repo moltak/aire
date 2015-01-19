@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
+import java.util.Calendar;
+
 /**
  * Created by moltak on 14. 12. 25..
  * 바람 세기 측정.
@@ -15,14 +17,21 @@ import android.util.Log;
 public class BlowAirDetector implements Runnable {
     @Override
     public void run() {
-        isBlowing();
+        try {
+            isBlowing();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void isBlowing() {
+    public void isBlowing() throws InterruptedException {
         int minSize = AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
         AudioRecord ar = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000,
                 AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, minSize);
+
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        Log.d("timer", "  timer is stared");
 
         short[] buffer = new short[minSize];
         ar.startRecording();
@@ -36,12 +45,18 @@ public class BlowAirDetector implements Runnable {
                 }
             }
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.sleep(100);
+
+            if (isNotTimeOver(startTime)) break;
         }
+    }
+
+    private boolean isNotTimeOver(long startTime) {
+        if(Calendar.getInstance().getTimeInMillis() - startTime >= 5000) {
+            Log.d("timer", "  time is over.");
+            return true;
+        }
+        return false;
     }
 
     private Handler blowupHandler = new Handler(Looper.getMainLooper()) {
